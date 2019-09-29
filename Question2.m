@@ -1,4 +1,7 @@
-x = -5:5;
+clear all;
+close all;
+
+x = linspace(-5,5);
 y = log(exp(-abs(x-0)/1))-log(exp(-abs(x-1)/2));
 
 plot(x,y,'g',0,0.5,'g*',1,-1,'g*')
