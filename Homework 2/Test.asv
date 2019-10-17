@@ -21,10 +21,9 @@ legend('Class 0','Class 1'),
 title('Data and their true labels'),
 xlabel('x_1'), ylabel('x_2'), 
 
-lambda = [0 1;1 0]; % loss values
-gamma = (lambda(2,1)-lambda(1,1))/(lambda(1,2)-lambda(2,2)) * p(1)/p(2); %threshold
-discriminantScore = log(evalGaussian(x,mu(:,2),Sigma(:,:,2)))-log(evalGaussian(x,mu(:,1),Sigma(:,:,1)));% - log(gamma);
-decision = (discriminantScore >= log(gamma));
+
+discriminantScore =
+
 
 ind00 = find(decision==0 & label==0); p00 = length(ind00)/Nc(1); % probability of true negative
 ind10 = find(decision==1 & label==0); p10 = length(ind10)/Nc(1); % probability of false positive
