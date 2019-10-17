@@ -6,7 +6,7 @@ mu_x = 0; mu_y = 0; mu_noise = 0;
 Sigma_x = 0.25; Sigma_y = 0.25; Sigma_noise = 0.3162;
 
 x = 2; y = 2;
-e_power = -0.5*[x y]*inv([Sigma_x^2 0;0 Sigma_y^2])*[x y];
+e_power = -0.5*[x y]*inv([Sigma_x^2 0;0 Sigma_y^2])*[x;y];
 p = (2*pi*Sigma_x*Sigma_y)^(-1)*exp(e_power);
 
 
