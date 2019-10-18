@@ -11,8 +11,26 @@ x = 0; y = 0;
 e_power = -0.5*[x y]*inv([Sigma_x^2 0;0 Sigma_y^2])*[x;y];
 p = (2*pi*Sigma_x*Sigma_y)^(-1)*exp(e_power);
 
+est = zeros(2,25);
+a = 1;
+for i = -2:2
+    for j = -2:2
+        est(1,a) = i;
+        est(2,a) = j;
+        a = a+1;
+    end
+end
 
-n = mvnrn d(mu_noise,Sigma_noise,length(k))';
+est = double(est);
+
+for i = 1:25
+    for j = 1:length(k)
+        er(j,i) = distance(est(:,i),k(:,j));
+    end
+end
+
+
+n = mvnrnd(mu_noise,Sigma_noise,length(k))';
 r = distance(object_true,k) + n;
 discriminantScore = evalGaussian(n,mu_noise,Sigma_noise);
 
