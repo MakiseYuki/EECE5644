@@ -26,7 +26,7 @@ L(j,i) = norm(w_true-w_MAP,2)^2;
 end
 end
 L = sort(L,1);
-figure(1)
+figure(1),
 plot(log10(Gamma),log10(L(1,:)),"-b"),hold on,
 plot(log10(Gamma),log10(L(25,:)),"-r"),hold on,
 plot(log10(Gamma),log10(L(50,:)),"-g"),hold on,

@@ -7,10 +7,10 @@ a = w_true(1);
 b = w_true(2);
 c = w_true(3);
 d = w_true(4);
-
-Gamma_map = logspace(-5,5,10);
-L = zeros(100,10);
-for s = 1:10
+Gamma_N = 100;
+Gamma_map = logspace(-5,5,Gamma_N);
+L = zeros(100,Gamma_N);
+for s = 1:Gamma_N
     Gamma = Gamma_map(s);
     for i = 1:100
 
@@ -49,11 +49,11 @@ end
 
 L = sort(L,1);
 figure(1),
-plot(log10(Gamma),log10(L(1,:)),"-b"),hold on,
-plot(log10(Gamma),log10(L(25,:)),"-r"),hold on,
-plot(log10(Gamma),log10(L(50,:)),"-g"),hold on,
-plot(log10(Gamma),log10(L(75,:)),"-m"),hold on,
-plot(log10(Gamma),log10(L(100,:)),"-c"),
+plot(log10(Gamma_map),log10(L(1,:)),"-b"),hold on,
+plot(log10(Gamma_map),log10(L(25,:)),"-r"),hold on,
+plot(log10(Gamma_map),log10(L(50,:)),"-g"),hold on,
+plot(log10(Gamma_map),log10(L(75,:)),"-m"),hold on,
+plot(log10(Gamma_map),log10(L(100,:)),"-c"),
 xlabel('gamma'), ylabel('L2 Distance between w_{true} and w_{MAP}'), 
 legend("Minimum of SE","25% of SE","Median of SE","75% of SE","Maximum of SE","location","Northwest");
 
