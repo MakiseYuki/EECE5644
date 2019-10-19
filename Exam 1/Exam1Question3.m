@@ -49,11 +49,11 @@ end
 
 L = sort(L,1);
 figure(1),
-plot(log10(Gamma),log10(L(1)),"-b"),hold on,
-plot(log10(Gamma),log10(L(25)),"-r"),hold on,
-plot(log10(Gamma),log10(L(50)),"-g"),hold on,
-plot(log10(Gamma),log10(L(75)),"-m"),hold on,
-plot(log10(Gamma),log10(L(100)),"-c"),
+plot(log10(Gamma),log10(L(1,:)),"-b"),hold on,
+plot(log10(Gamma),log10(L(25,:)),"-r"),hold on,
+plot(log10(Gamma),log10(L(50,:)),"-g"),hold on,
+plot(log10(Gamma),log10(L(75,:)),"-m"),hold on,
+plot(log10(Gamma),log10(L(100,:)),"-c"),
 xlabel('gamma'), ylabel('L2 Distance between w_{true} and w_{MAP}'), 
 legend("Minimum of SE","25% of SE","Median of SE","75% of SE","Maximum of SE","location","Northwest");
 
