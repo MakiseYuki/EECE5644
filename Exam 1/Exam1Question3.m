@@ -8,38 +8,43 @@ b = w_true(2);
 c = w_true(3);
 d = w_true(4);
 
-for i = 1:100
+Gamma_map = logspace(-5,5,10);
+L = zeros(100,10);
+for s = 1:10
+    Gamma = Gamma_map(s);
+    for i = 1:100
 
-Gamma = 1;
-Sigma_v = 2;
-mu = [0 0 0 0];
-N = 10;
-I = eye(4);
- 
-w_prior = mvnrnd(mu,Gamma*I,1);
+    
+    Sigma_v = 2;
+    mu = [0 0 0 0];
+    N = 10;
+    I = eye(4);
 
-v = mvnrnd(0,Sigma_v,N);
+    w_prior = mvnrnd(mu,Gamma*I,1);
 
-x = -1 + 2*rand(N,1);
+    v = mvnrnd(0,Sigma_v,N);
 
-xt = zeros(4,N);
+    x = -1 + 2*rand(N,1);
 
-for j = 1:N
-    xt(1,j) = x(j)^3;
-    xt(2,j) = x(j)^2;
-    xt(3,j) = x(j);
-    xt(4,j) = 1;
-end
+    xt = zeros(4,N);
 
-y = xt'*w_true + v;
+    for j = 1:N
+        xt(1,j) = x(j)^3;
+        xt(2,j) = x(j)^2;
+        xt(3,j) = x(j);
+        xt(4,j) = 1;
+    end
 
-D(1,:) = x;
-D(2,:) = y;
+    y = xt'*w_true + v;
 
-est_w = estMAP(xt',y',Sigma_v,Gamma*I)';
+    D(1,:) = x;
+    D(2,:) = y;
 
-L(i) = norm(w_true - est_w,2)^2;
+    est_w = estMAP(xt',y',Sigma_v,Gamma*I)';
 
+    L(i,s) = norm(w_true - est_w,2)^2;
+
+    end
 end
 
 L = sort(L,1);
