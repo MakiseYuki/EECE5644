@@ -49,16 +49,16 @@ end
 
 L = sort(L,1);
 figure(1),
-plot(log10(Gamma_map),log10(L(1,:)),"-r"),hold on,
-plot(log10(Gamma_map),log10(L(25,:)),"-g"),hold on,
-plot(log10(Gamma_map),log10(L(50,:)),"-b"),hold on,
-plot(log10(Gamma_map),log10(L(75,:)),"-k"),hold on,
-plot(log10(Gamma_map),log10(L(100,:)),"-y"),
-xlabel('Gamma'), ylabel('L2 Distance between true vector and MAP estimate vector'), 
-legend("Minimum of Squared Error","25% of Squared Error","Median of Squared Error","75% of Squared Error","Maximum of Squared Error","location","Northwest");
+plot(log10(Gamma_map),log10(L(1,:)),"-b"),hold on,
+plot(log10(Gamma_map),log10(L(25,:)),"-r"),hold on,
+plot(log10(Gamma_map),log10(L(50,:)),"-g"),hold on,
+plot(log10(Gamma_map),log10(L(75,:)),"-m"),hold on,
+plot(log10(Gamma_map),log10(L(100,:)),"-c"),
+xlabel('gamma'), ylabel('L2 Distance between w_{true} and w_{MAP}'), 
+legend("Minimum of SE","25% of SE","Median of SE","75% of SE","Maximum of SE","location","Northwest");
 
 function w = estMAP(x,y,Sigma_noise,Sigma2)
-n = y*inv(Sigma_noise)*x;
-d = x'*inv(Sigma_noise)*x+inv(Sigma2);
-w = n*inv(d);
+nume = y*inv(Sigma_noise)*x;
+deno = x'*inv(Sigma_noise)*x+inv(Sigma2);
+w = nume*inv(deno);
 end
