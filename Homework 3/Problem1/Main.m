@@ -28,7 +28,6 @@ K = 10;
 meanSquared_error = zeros(2,6,3);
 for s = 1:3
 
-
 if s == 1
 selected_data = data_100;
 selected_label = label_100;
