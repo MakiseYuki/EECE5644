@@ -8,13 +8,17 @@ imagePlane = imread(fullfile(image_folder,file_names(1).name));
 imageBird = imread(fullfile(image_folder,file_names(2).name));
 Image = imagePlane;
 
-K = 5;
+for i = 1:4
+K = i+1;
 
 maskKMean = kMeanCluster(Image,K);
 maskGMM = kGaussian_color_EM(Image,K);
+maskKMean = rgb2gray(maskKMean);
+maskGMM = rgb2gray(maskGMM);
 
 figure(1),
-subplot(1,3,1); imshow(Image); title('original');
-subplot(1,3,2); imshow(maskKMean); title('K mean segmentation');
-subplot(1,3,3); imshow(maskGMM); title('GMM segamentation');
-disp('number of segments ='); disp(K)
+subplot(4,3,3*i-2); imshow(Image); title('original');
+subplot(4,3,3*i-1); imshow(maskKMean); title("K mean segmentation with " + K + " Means");
+subplot(4,3,3*i); imshow(maskGMM); title("GMM segamentation with " + K + " Gaussian");
+disp('number of segments ='); disp(K), hold on,
+end
