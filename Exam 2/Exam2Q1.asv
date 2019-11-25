@@ -1,7 +1,7 @@
 clear all, close all,
 
 plotData = 1;
-n = 3; Nsample = 10000; Ntest = 10000; 
+n = 3; Nsample = 1000; Ntest = 10000; 
 alpha = [0.15,0.35,0.2,0.3]; % must add to 1.0
 meanVectors = [5 -5 -5 5;5 5 -5 -5;5 5 5 5];
 covEvalues = [1.3^2 0 0;0 1.2^2 0;0 0 1.4^2];
@@ -56,12 +56,11 @@ pError1 = (size(ind12,2)+size(ind13,2)+size(ind14,2))/size(ind1,2);
 pError2 = (size(ind21,2)+size(ind23,2)+size(ind24,2))/size(ind2,2);
 pError3 = (size(ind31,2)+size(ind32,2)+size(ind34,2))/size(ind3,2);
 pError4 = (size(ind41,2)+size(ind42,2)+size(ind43,2))/size(ind4,2);
-accuracy_rate = (confusion_matrix(1,1)+confusion_matrix(2,2)+confusion_matrix(3,3)+confusion_matrix(4,4))/length(xSample(1,:));
+accuracy_rate = fo
 
-
-testData_10000 = xSample;
-testLabel_10000 = trueLabel;
-save('testData_10000.mat','testData_10000','testLabel_10000');
+trainData_1000 = xSample;
+trainLabel_1000 = trueLabel;
+%save('trainData_10000.mat','trainData_10000','trainLabel_10000');
 
 
 figure(2), subplot(2,2,1),

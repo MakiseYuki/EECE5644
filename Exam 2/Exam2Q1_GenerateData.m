@@ -41,6 +41,7 @@ ind34 = find(Ltrain_classified==4 & Ltrain==3);
 ind41 = find(Ltrain_classified==1 & Ltrain==4);
 ind42 = find(Ltrain_classified==2 & Ltrain==4);
 ind43 = find(Ltrain_classified==3 & Ltrain==4);
+
 Pe1 = (size(ind12,2)+size(ind13,2)+size(ind14,2))/size(ind1,2)
 Pe2 = (size(ind21,2)+size(ind23,2)+size(ind24,2))/size(ind2,2)
 Pe3 = (size(ind31,2)+size(ind32,2)+size(ind34,2))/size(ind3,2)
@@ -92,6 +93,7 @@ if plotData == 1
     plot3(Xtrain(1,ind4),Xtrain(2,ind4),Xtrain(3,ind4),'.m'),
     title('Training Data'), axis equal,
 end
+
 % 
 % 
 
