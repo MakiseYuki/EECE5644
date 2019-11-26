@@ -22,103 +22,76 @@ x_train = Xtrain[0,:]
 t_train = Xtrain[1,:]
 x_test = Xtest[0,:]
 t_test = Xtest[1,:]
+logsof_activation = ['sigmoid','softplus']
 
 accuracy = np.zeros((10,10))
 tenf = KFold(n_splits=10)
-j = 0
-for train_indice, test_indice in tenf.split(x_train):
+k=0
+for choose in logsof_activation:
+    j = 0
+    for train_indice, test_indice in tenf.split(x_train):
         
-        x_sep_train, x_validation = x_train[train_indice], x_train[test_indice]
-        t_sep_train, t_validation = t_train[train_indice], t_train[test_indice]
-        for i in range(1,11):
-            model = Sequential()
+            x_sep_train, x_validation = x_train[train_indice], x_train[test_indice]
+            t_sep_train, t_validation = t_train[train_indice], t_train[test_indice]
+            for i in range(1,11):
+                model = Sequential()
             
-            model.add(Dense(i, activation='sigmoid', input_dim=1))
-            model.add(Dense(1, activation=None))
-            sgd = SGD(lr=0.01, decay=1e-5, momentum=0.9, nesterov=True)
-            model.compile(loss='mean_squared_error', optimizer='adam')
+                model.add(Dense(i, activation=choose, input_dim=1))
+                model.add(Dense(1, activation=None))
+                sgd = SGD(lr=0.01, decay=1e-5, momentum=0.9, nesterov=True)
+                model.compile(loss='mean_squared_error', optimizer='adam')
                        
-            converged = 0
-            temp = 0
-            epsilon = 0.01
-            while not converged:
-                model.fit(x_sep_train, t_sep_train, batch_size=128, epochs=100, verbose=0)
-                score = model.evaluate(x_validation, t_validation, verbose=0)
-                converged = np.abs(score-temp)<epsilon
-                temp = score
-            print(score)
-            accuracy[j,i-1] = score
-        j+=1
-logistic_accuracy = accuracy
-model_means_log = np.mean(accuracy,axis=1)
+                converged = 0
+                temp = 0
+                epsilon = 0.11
+                while not converged:
+                    model.fit(x_sep_train, t_sep_train, batch_size=128, epochs=20, verbose=0)
+                    score = model.evaluate(x_validation, t_validation, verbose=0)
+                    converged = np.abs(score-temp)<epsilon
+                    temp = score
+                
+                print("Score in Fold seperation" + str(i))
+                print(score)
+                accuracy[j,i-1] = score
+            j+=1
+    if i == 0:
+        logistic_accuracy = accuracy
+    else:
+        softplus_accuracy = accuracy
+k+=1
+
+model_means_log = np.mean(logistic_accuracyy,axis=1)
+model_means_sof = np.mean(softplus_accuracy, axis=1)
 model_order_log = (np.argmin(model_means_log)+1)
+model_order_sof = (np.argmin(model_means_sof)+1)
 
-accuracy = np.zeros((10,10))
-j = 0
-for train_indice, test_indice in tenf.split(x_train):
-        
-        x_sep_train, x_validation = x_train[train_indice], x_train[test_indice]
-        t_sep_train, t_validation = t_train[train_indice], t_train[test_indice]
-        for i in range(1,11):
-            model = Sequential()
-            
-            model.add(Dense(i, activation='softplus', input_dim=1))
-            model.add(Dense(1, activation=None))
-            sgd = SGD(lr=0.01, decay=1e-5, momentum=0.9, nesterov=True)
-            model.compile(loss='mean_squared_error', optimizer='adam')
-                       
-            converged = 0
-            temp = 0
-            epsilon = 0.01
-            while not converged:
-                model.fit(x_sep_train, t_sep_train, batch_size=128, epochs=100, verbose=0)
-                score = model.evaluate(x_validation, t_validation, verbose=0)
-                converged = np.abs(score-temp)<epsilon
-                temp = score
-            print(score)
-            accuracy[j,i-1] = score
-        j+=1
-softplus_accuracy = accuracy
-model_means_sof = np.mean(accuracy,axis=1)
-model_order_sof = (np.argmin(model_means_soft)+1)
+#Choose the better activation function between two traning model
+if model_means_sof[model_order_soft-1] < model_means_log[model_order_log-1]:
+    choose = 1
+    model_order = model_order_soft
+else:
+    choose = 0
+    model_order = model_order_log
 
-#Apply to testing of logistic
-model = Sequential()          
-model.add(Dense(model_order_log, activation='sigmoid', input_dim=1))
+model = Sequential()
+model.add(Dense(model_order, activation=logsof_activation[choose], input_dim=1))
 model.add(Dense(1, activation=None))
 sgd = SGD(lr=0.01, decay=1e-5, momentum=0.9, nesterov=True)
-model.compile(loss='mean_squared_error', optimizer='adam')
-                       
+model.compile(loss='mean_squared_error',optimizer='adam')
+               
 converged = 0
-temp = 0
-epsilon = 0.01
+tmp = 0
+epsilon = 0.11
 while not converged:
-    model.fit(x_train, t_train, batch_size=128, epochs=100, verbose=0)
-    score = model.evaluate(x_test, t_test, verbose=0)
+    model.fit(x_train, t_train, batch_size=128, epochs=20)
+    score = model.evaluate(x_test, t_test)
+    print(score)
+    print(temp)
     converged = np.abs(score-temp)<epsilon
-    temp = score
-print(score)
+    temp = score    
+print("MSE on Test Data: " + str(score))
+t_prediction = model.predict(x_test,batch_size=None)
 
-print("MSE on Test Data with Logistic: " + str(score))
-
-#Apply to testing of softplus
-model = Sequential()          
-model.add(Dense(model_order_sof, activation='softplus', input_dim=1))
-model.add(Dense(1, activation=None))
-sgd = SGD(lr=0.01, decay=1e-5, momentum=0.9, nesterov=True)
-model.compile(loss='mean_squared_error', optimizer='adam')
-                       
-converged = 0
-temp = 0
-epsilon = 0.01
-while not converged:
-    model.fit(x_train, t_train, batch_size=128, epochs=100, verbose=0)
-    score = model.evaluate(x_test, t_test, verbose=0)
-    converged = np.abs(score-temp)<epsilon
-    temp = score
-print(score)
-
-print("MSE on Test Data with Softplus: " + str(score))
 
 plt.plot(np.arange(1,11), model_means_log,'r')
 plt.plot(np.arange(1,11), model_means_sof,'g')
@@ -127,4 +100,21 @@ plt.xlabel('Number of Perceptrons')
 plt.ylabel('Mean Square Error')
 plt.legend(['Sigmoid', 'Softplus'])
 plt.show()
+
+
+plt.subplot(121)
+plt.plot(x_test,t_test,'.')
+plt.title('Original Data')
+plt.xlabel('x1'); plt.ylabel('Target = x2')
+plt.subplot(122)
+plt.title('Neural Network Output')
+plt.plot(x_test, t_prediction, '.')
+plt.xlabel('x1');
+plt.show()
+
+
+
+
+
+
 
