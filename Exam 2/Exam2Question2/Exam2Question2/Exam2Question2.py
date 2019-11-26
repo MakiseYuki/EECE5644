@@ -50,9 +50,10 @@ for choose in logsof_activation:
                     converged = np.abs(score-temp)<epsilon
                     temp = score
                 
-                print("Score in Fold seperation" + str(i))
+                print("Score in Fold seperation detemination " + str(i))
                 print(score)
                 accuracy[j,i-1] = score
+            print("Score in each train_validation determination " + str(score))
             j+=1
     if i == 0:
         logistic_accuracy = accuracy
