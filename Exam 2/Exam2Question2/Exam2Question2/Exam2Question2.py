@@ -40,7 +40,7 @@ for train_indice, test_indice in tenf.split(x_train):
                        
             converged = 0
             temp = 0
-            epsilon = 0.001
+            epsilon = 0.01
             while not converged:
                 model.fit(x_sep_train, t_sep_train, batch_size=128, epochs=100, verbose=0)
                 score = model.evaluate(x_validation, t_validation, verbose=0)
@@ -69,7 +69,7 @@ for train_indice, test_indice in tenf.split(x_train):
                        
             converged = 0
             temp = 0
-            epsilon = 0.001
+            epsilon = 0.01
             while not converged:
                 model.fit(x_sep_train, t_sep_train, batch_size=128, epochs=100, verbose=0)
                 score = model.evaluate(x_validation, t_validation, verbose=0)
@@ -81,4 +81,50 @@ for train_indice, test_indice in tenf.split(x_train):
 softplus_accuracy = accuracy
 model_means_soft = np.mean(accuracy,axis=1)
 model_order_sof = (np.argmin(model_means)+1)
+
+#Apply to testing of logistic
+model = Sequential()          
+model.add(Dense(model_order_log, activation='sigmoid', input_dim=1))
+model.add(Dense(1, activation=None))
+sgd = SGD(lr=0.01, decay=1e-5, momentum=0.9, nesterov=True)
+model.compile(loss='mean_squared_error', optimizer='adam')
+                       
+converged = 0
+temp = 0
+epsilon = 0.01
+while not converged:
+    model.fit(x_train, t_train, batch_size=128, epochs=100, verbose=0)
+    score = model.evaluate(x_test, t_test, verbose=0)
+    converged = np.abs(score-temp)<epsilon
+    temp = score
+print(score)
+
+print("MSE on Test Data with Logistic: " + str(score))
+
+#Apply to testing of softplus
+model = Sequential()          
+model.add(Dense(model_order_sof, activation='softplus', input_dim=1))
+model.add(Dense(1, activation=None))
+sgd = SGD(lr=0.01, decay=1e-5, momentum=0.9, nesterov=True)
+model.compile(loss='mean_squared_error', optimizer='adam')
+                       
+converged = 0
+temp = 0
+epsilon = 0.01
+while not converged:
+    model.fit(x_train, t_train, batch_size=128, epochs=100, verbose=0)
+    score = model.evaluate(x_test, t_test, verbose=0)
+    converged = np.abs(score-temp)<epsilon
+    temp = score
+print(score)
+
+print("MSE on Test Data with Softplus: " + str(score))
+
+plt.plot(np.arange(1,11), model_means_log,'r')
+plt.plot(np.arange(1,11), model_means_sof,'g')
+plt.title('1000 samples with 10-fold cross validation training in 1-10 Perceptron')
+plt.xlabel('Number of Perceptrons')
+plt.ylabel('Mean Square Error')
+plt.legend(['Sigmoid', 'Softplus'])
+plt.show()
 
