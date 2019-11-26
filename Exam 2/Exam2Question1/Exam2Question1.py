@@ -1,3 +1,4 @@
+import time
 import tensorflow as tf
 import numpy as np
 import keras
@@ -7,6 +8,7 @@ from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation
 from keras.optimizers import SGD
 from sklearn.model_selection import KFold
+from sklearn.metrics import confusion_matrix
 from tensorflow.python.client import device_lib
 
 #config = tf.ConfigProto( device_count = {'GPU': 1 , 'CPU': 56} ) 
@@ -27,7 +29,7 @@ trainData_10000 = trainDataLD_10000['trainData_10000']
 trainLabel_1000 = trainDataLD_1000['trainLabel_1000']
 trainLabel_10000 = trainDataLD_10000['trainLabel_10000']
 
-TEST = 10000
+TEST = 100
 
 if TEST==100:
     print('100 training case')
@@ -72,15 +74,23 @@ if TEST==100:
 
     model_means = np.mean(accuracy,axis=1)
     model_order = np.where(model_means == np.max(model_means))[0][0] + 1
-    model_order
+ 
+    time.sleep(5.0)
+   
+    #plt.plot(np.arange(1,11), model_means, 'r')
+    #plt.title('Number of Sample = 100, Epochs = 100 With 10-Fold Cross Validation Traning')
+    #plt.xlabel('Perceptrons')
+    #plt.ylabel('Probability of Correct Rate')
+    #plt.show()
 
-    plt.plot(np.arange(1,11), model_means, 'r')
-    plt.title('Number of Sample = 100, Epochs = 100 With 10-Fold Cross Validation Traning')
-    plt.xlabel('Perceptrons')
-    plt.ylabel('Probability of Correct Rate')
-    plt.show()
+    testDataLD_100 = sio.loadmat('testData_100.mat')
+    testData_100 = testDataLD_100['testData_100']
+    testLabel_100 = testDataLD_100['testLabel_100']
 
-    y_testfinal = keras.utils.to_categorical(trainLabel_100, num_classes = 4)
+    x_test = trainData_100.transpose()
+    testLabel_100 = testLabel_100-1; #indice in matlab  1 is 0 in python
+    testLabel_100 = testLabel_100[0] #indice in matlab  1 is 0 in python
+    y_test = keras.utils.to_categorical(testLabel_100, num_classes = 4)
     model = Sequential()
     
     model.add(Dense(model_order, activation='tanh', input_dim=3))
@@ -88,14 +98,19 @@ if TEST==100:
     sgd = SGD(lr=0.01, decay=1e-5, momentum=0.9, nesterov=True)
     model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy'])
     converged = 0
-    tmp = 0
+    temp = 0
     epsilon = 0.001
     while not converged:
         model.fit(x_data, y_data, batch_size=None, epochs=100, verbose=0)
-        score = model.evaluate(x_data, y_testfinal,verbose=0)
-        converged = np.abs(score[1]-tmp)<epsilon
-        tmp = score[1]
+        score = model.evaluate(x_test, y_test,verbose=1)
+        converged = np.abs(score[1]-temp)<epsilon
+        temp = score[1]
+    print(score)
     print("Accuracy Rate on Test Data: " + str(score[1]))
+
+    #NN_predict = model.predict(x)
+    #decision = np.argmax(NN_predict,axis=1)
+    #confusion_matrix(L, decision, labels=[0, 1, 2, 3])
 
 
 elif TEST==10000:
@@ -141,7 +156,6 @@ elif TEST==10000:
 
     model_means = np.mean(accuracy,axis=1)
     model_order = np.where(model_means == np.max(model_means))[0][0] + 1
-    model_order
 
     plt.plot(np.arange(1,11), model_means, 'r')
     plt.title('Number of Sample = 10000, Epochs = 100 With 10-Fold Cross Validation Traning')
@@ -157,11 +171,12 @@ elif TEST==10000:
     sgd = SGD(lr=0.01, decay=1e-5, momentum=0.9, nesterov=True)
     model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy'])
     converged = 0
-    tmp = 0
+    temp = 0
     epsilon = 0.001
     while not converged:
         model.fit(x_data, y_data, batch_size=None, epochs=100, verbose=0)
         score = model.evaluate(x_data, y_testfinal,verbose=0)
-        converged = np.abs(score[1]-tmp)<epsilon
-        tmp = score[1]
+        converged = np.abs(score[1]-temp)<epsilon
+        temp = score[1]
+
     print("Accuracy Rate on Test Data: " + str(score[1]))
