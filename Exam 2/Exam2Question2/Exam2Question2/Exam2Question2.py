@@ -51,7 +51,7 @@ for train_indice, test_indice in tenf.split(x_train):
         j+=1
 logistic_accuracy = accuracy
 model_means_log = np.mean(accuracy,axis=1)
-model_order_log = (np.argmin(model_means)+1)
+model_order_log = (np.argmin(model_means_log)+1)
 
 accuracy = np.zeros((10,10))
 j = 0
@@ -79,8 +79,8 @@ for train_indice, test_indice in tenf.split(x_train):
             accuracy[j,i-1] = score
         j+=1
 softplus_accuracy = accuracy
-model_means_soft = np.mean(accuracy,axis=1)
-model_order_sof = (np.argmin(model_means)+1)
+model_means_sof = np.mean(accuracy,axis=1)
+model_order_sof = (np.argmin(model_means_soft)+1)
 
 #Apply to testing of logistic
 model = Sequential()          
