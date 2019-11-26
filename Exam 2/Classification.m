@@ -28,56 +28,56 @@ trueLabel(:,ind3) = 3;
 trueLabel(:,ind4) = 4;
 
 
-% inputs = trainData;
-% outputs = trueLabel;
-% 
-% net = network(1,2,[1;0],[1;0],[0,0;1,0],[0 1]);
-% net.layers{1}.size = 5;
-% 
-% net.layers{1}.transferFcn = 'logsig';
-% 
-% net = configure(net,inputs,outputs);
-% initial_output = net(inputs);
-% 
-% net.trainFcn = 'trainlm';
-% net = train(net,inputs,outputs);
-% final_output = net(inputs);
+inputs = xSample;
+outputs = trueLabel;
 
-delta = 1e-5; % tolerance for EM stopping criterion
-regWeight = 1e-10; % regularization parameter for covariance estimates
+net = network(1,2,[1;0],[1;0],[0,0;1,0],[0 1]);
+net.layers{1}.size = 5;
 
-N = 100;
-[d,M] = size(meanVectors); % determine dimensionality of samples and number of GMM components
+net.layers{1}.transferFcn = 'logsig';
 
-% Initialize the GMM to randomly selected samples
-alpha = ones(1,M)/M;
-shuffledIndices = randperm(N);
-mu = xSample(:,shuffledIndices(1:M)); % pick M random samples as initial mean estimates
-[~,assignedCentroidLabels] = min(pdist2(mu',xSample'),[],1); % assign each sample to the nearest mean
-for m = 1:M % use sample covariances of initial assignments as initial covariance estimates
-    covEvectors(:,:,m) = cov(xSample(:,find(assignedCentroidLabels==m))') + regWeight*eye(d,d);
-end
-t = 0; %displayProgress(t,x,alpha,mu,Sigma);
+net = configure(net,inputs,outputs);
+initial_output = net(inputs);
 
-Converged = 0; % Not converged at the beginning
-while ~Converged
-    for l = 1:M
-        temp(l,:) = repmat(alpha(l),1,N).*evalGaussian(xSample,mu(:,l),covEvectors(:,:,l));
-    end
-    plgivenx = temp./sum(temp,1);
-    alphaNew = mean(plgivenx,2);
-    w = plgivenx./repmat(sum(plgivenx,2),1,N);
-    muNew = xSample*w';
-    for l = 1:M
-        v = xSample-repmat(muNew(:,l),1,N);
-        u = repmat(w(l,:),d,1).*v;
-        SigmaNew(:,:,l) = u*v' + regWeight*eye(d,d); % adding a small regularization term
-    end
-    Dalpha = sum(abs(alphaNew-alpha'));
-    Dmu = sum(sum(abs(muNew-mu)));
-    DSigma = sum(sum(abs(abs(SigmaNew-covEvectors))));
-    Converged = ((Dalpha+Dmu+DSigma)<delta); % Check if converged
-    alpha = alphaNew; mu = muNew; covEvectors = SigmaNew;
-    t = t+1; 
-    %displayProgress(t,x,alpha,mu,Sigma);
-end
+net.trainFcn = 'trainlm';
+net = train(net,inputs,outputs);
+final_output = net(inputs);
+
+% delta = 1e-5; % tolerance for EM stopping criterion
+% regWeight = 1e-10; % regularization parameter for covariance estimates
+% 
+% N = 100;
+% [d,M] = size(meanVectors); % determine dimensionality of samples and number of GMM components
+% 
+% % Initialize the GMM to randomly selected samples
+% alpha = ones(1,M)/M;
+% shuffledIndices = randperm(N);
+% mu = xSample(:,shuffledIndices(1:M)); % pick M random samples as initial mean estimates
+% [~,assignedCentroidLabels] = min(pdist2(mu',xSample'),[],1); % assign each sample to the nearest mean
+% for m = 1:M % use sample covariances of initial assignments as initial covariance estimates
+%     covEvectors(:,:,m) = cov(xSample(:,find(assignedCentroidLabels==m))') + regWeight*eye(d,d);
+% end
+% t = 0; %displayProgress(t,x,alpha,mu,Sigma);
+% 
+% Converged = 0; % Not converged at the beginning
+% while ~Converged
+%     for l = 1:M
+%         temp(l,:) = repmat(alpha(l),1,N).*evalGaussian(xSample,mu(:,l),covEvectors(:,:,l));
+%     end
+%     plgivenx = temp./sum(temp,1);
+%     alphaNew = mean(plgivenx,2);
+%     w = plgivenx./repmat(sum(plgivenx,2),1,N);
+%     muNew = xSample*w';
+%     for l = 1:M
+%         v = xSample-repmat(muNew(:,l),1,N);
+%         u = repmat(w(l,:),d,1).*v;
+%         SigmaNew(:,:,l) = u*v' + regWeight*eye(d,d); % adding a small regularization term
+%     end
+%     Dalpha = sum(abs(alphaNew-alpha'));
+%     Dmu = sum(sum(abs(muNew-mu)));
+%     DSigma = sum(sum(abs(abs(SigmaNew-covEvectors))));
+%     Converged = ((Dalpha+Dmu+DSigma)<delta); % Check if converged
+%     alpha = alphaNew; mu = muNew; covEvectors = SigmaNew;
+%     t = t+1; 
+%     %displayProgress(t,x,alpha,mu,Sigma);
+% end
