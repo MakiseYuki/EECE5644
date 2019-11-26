@@ -18,7 +18,7 @@ from sklearn.metrics import confusion_matrix
 #sess = tf.Session(config=tf.ConfigProto(log_device_placement=True))
 
 #print(device_lib.list_local_devices())
-
+print('Training Samples with Neural Network')
 start = timeit.default_timer()
 
 TEST = 100
