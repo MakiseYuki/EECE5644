@@ -73,21 +73,21 @@ legend('Samples = 1000','Classified Label = 2','Classified Label = 3','Classifie
 title('Wrong Decision in True Label = 1 ');
 subplot(2,2,2),
 plot3(xSample(1,:),xSample(2,:),xSample(3,:),'.g'),hold on,
-plot3(xSample(1,ind21),xSample(2,ind21),xSample(3,ind21),'*c'),hold on,
+plot3(xSample(1,ind21),xSample(2,ind21),xSample(3,ind21),'*b'),hold on,
 plot3(xSample(1,ind23),xSample(2,ind23),xSample(3,ind23),'*r'),hold on,
 plot3(xSample(1,ind24),xSample(2,ind24),xSample(3,ind24),'*m'),
 legend('Samples = 1000','Classified Label = 1','Classified Label = 3','Classified Label = 4');
 title('Wrong Decision in True Label = 2 ');
 subplot(2,2,3),
 plot3(xSample(1,:),xSample(2,:),xSample(3,:),'.g'),hold on,
-plot3(xSample(1,ind31),xSample(2,ind31),xSample(3,ind31),'*c'),hold on,
+plot3(xSample(1,ind31),xSample(2,ind31),xSample(3,ind31),'*b'),hold on,
 plot3(xSample(1,ind32),xSample(2,ind32),xSample(3,ind32),'*r'),hold on,
 plot3(xSample(1,ind34),xSample(2,ind34),xSample(3,ind34),'*m'),
 legend('Samples = 1000','Classified Label = 1','Classified Label = 2','Classified Label = 4');
 title('Wrong Decision in True Label = 3 ');
 subplot(2,2,4),
 plot3(xSample(1,:),xSample(2,:),xSample(3,:),'.g'),hold on,
-plot3(xSample(1,ind41),xSample(2,ind41),xSample(3,ind41),'*c'),hold on,
+plot3(xSample(1,ind41),xSample(2,ind41),xSample(3,ind41),'*b'),hold on,
 plot3(xSample(1,ind42),xSample(2,ind42),xSample(3,ind42),'*r'),hold on,
 plot3(xSample(1,ind43),xSample(2,ind43),xSample(3,ind43),'*m'),
 legend('Samples = 1000','Classified Label = 1','Classified Label = 2','Classified Label = 3');
@@ -100,6 +100,6 @@ if plotData == 1
     plot3(xSample(1,ind2),xSample(2,ind2),xSample(3,ind2),'.b'),hold on,
     plot3(xSample(1,ind3),xSample(2,ind3),xSample(3,ind3),'.g'),hold on,
     plot3(xSample(1,ind4),xSample(2,ind4),xSample(3,ind4),'.m'),
-    title('Setting Data Distribution and plotting Samples = 1000'), axis equal,
+    title('Setting Data Distribution and plotting'), axis equal,
     legend('Class 1','Class 2','Class 3','Class 4');
 end
