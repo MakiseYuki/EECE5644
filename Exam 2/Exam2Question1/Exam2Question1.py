@@ -55,7 +55,7 @@ if TEST == 100:
             tmp = 0
             epsilon = 0.001
             while not converged:
-                model.fit(x_train, y_train, batch_size=None, epochs=70, verbose=0)
+                model.fit(x_train, y_train, batch_size=None, epochs=100, verbose=0)
                 score = model.evaluate(x_test, y_test, verbose=0)
                 converged = np.abs(score[1]-tmp)<epsilon
                 tmp = score[1]
@@ -70,7 +70,7 @@ if TEST == 100:
     #model_order
 
     plt.plot(np.arange(1,11), model_means, 'r')
-    plt.title('number of sample = 100, epochs = 70 with 10-fold cross validation traning')
+    plt.title('number of sample = 100, epochs = 100 with 10-fold cross validation traning')
     plt.xlabel('perceptrons of each fold')
     plt.ylabel('probability of correct rate')
     plt.show()
@@ -96,7 +96,7 @@ if TEST == 100:
     tmp = 0
     epsilon = 0.001
     while not converged:
-        model.fit(x_data, y_data, batch_size=None, epochs=70, verbose=0)
+        model.fit(x_data, y_data, batch_size=None, epochs=100, verbose=0)
         score = model.evaluate(x_test, y_test,verbose=0)
         converged = np.abs(score[1]-tmp)<epsilon
         tmp = score[1]
@@ -141,7 +141,7 @@ elif TEST == 1000:
             tmp = 0
             epsilon = 0.001
             while not converged:
-                model.fit(x_train, y_train, batch_size=None, epochs=50, verbose=0)
+                model.fit(x_train, y_train, batch_size=None, epochs=100, verbose=0)
                 score = model.evaluate(x_test, y_test, verbose=0)
                 converged = np.abs(score[1]-tmp)<epsilon
                 tmp = score[1]
@@ -156,7 +156,7 @@ elif TEST == 1000:
     #model_order
 
     plt.plot(np.arange(1,11), model_means, 'r')
-    plt.title('Number of Sample = 1000, Epochs = 50 With 10-Fold Cross Validation Traning')
+    plt.title('Number of Sample = 1000, Epochs = 100 With 10-Fold Cross Validation Traning')
     plt.xlabel('Perceptrons of each Fold')
     plt.ylabel('Probability of Correct Rate')
     plt.show()
@@ -182,7 +182,7 @@ elif TEST == 1000:
     tmp = 0
     epsilon = 0.001
     while not converged:
-        model.fit(x_data, y_data, batch_size=None, epochs=50, verbose=0)
+        model.fit(x_data, y_data, batch_size=None, epochs=100, verbose=0)
         score = model.evaluate(x_test, y_test,verbose=0)
         converged = np.abs(score[1]-tmp)<epsilon
         tmp = score[1]
@@ -227,7 +227,7 @@ elif TEST == 10000:
             tmp = 0
             epsilon = 0.001
             while not converged:
-                model.fit(x_train, y_train, batch_size=None, epochs=30, verbose=0)
+                model.fit(x_train, y_train, batch_size=None, epochs=100, verbose=0)
                 score = model.evaluate(x_test, y_test, verbose=0)
                 converged = np.abs(score[1]-tmp)<epsilon
                 tmp = score[1]
@@ -242,7 +242,7 @@ elif TEST == 10000:
     #model_order
 
     plt.plot(np.arange(1,11), model_means, 'r')
-    plt.title('Number of Sample = 10000, Epochs = 30 With 10-Fold Cross Validation Traning')
+    plt.title('Number of Sample = 10000, Epochs = 100 With 10-Fold Cross Validation Traning')
     plt.xlabel('Perceptrons of each Fold')
     plt.ylabel('Probability of Correct Rate')
     plt.show()
@@ -268,7 +268,7 @@ elif TEST == 10000:
     tmp = 0
     epsilon = 0.001
     while not converged:
-        model.fit(x_data, y_data, batch_size=None, epochs=30, verbose=0)
+        model.fit(x_data, y_data, batch_size=None, epochs=100, verbose=0)
         score = model.evaluate(x_test, y_test,verbose=0)
         converged = np.abs(score[1]-tmp)<epsilon
         tmp = score[1]

@@ -32,48 +32,45 @@ Xtest(:,ind1) = covEvectors(:,:,1)*covEvalues^(1/2)*randn(n,length(ind1))+meanVe
 Xtest(:,ind2) = covEvectors(:,:,2)*covEvalues^(1/2)*randn(n,length(ind2))+meanVectors(:,2);
 Xtest(:,ind3) = covEvectors(:,:,3)*covEvalues^(1/2)*randn(n,length(ind3))+meanVectors(:,3);
 
-x = Xtrain(1,:);
-t = Xtrain(2,:);
+save('DataSets.mat','Xtrain','Xtest');
 
-dummy = ceil(linspace(0,Ntrain,K+1));
-for k = 1:K
-    indPartitionLimits(k,:) = [dummy(k)+1,dummy(k+1)]; 
-end
-
-for k = 1:K
-        indValidate = [indPartitionLimits(k,1):indPartitionLimits(k,2)];
-        xValidate = Xtrain(:,indValidate); % Using folk k as validation set
-        lValidate = Xlabel(indValidate);
-        if k == 1
-            indTrain = [indPartitionLimits(k,2)+1:Ntrain];
-        elseif k == K
-            indTrain = [1:indPartitionLimits(k,1)-1];
-        else
-            indTrain = cat(2,[1:indPartitionLimits(k,1)-1],[indPartitionLimits(k,2)+1:Ntrain]);
-        end
-        % using all other folds as training set
-        sep_Xtrain = Xtrain(1,indTrain); sep_Ttrain = Xtrain(2,indTrain);
-        
-        % create the network with 1 layer
-        net = feedforwardnet(10);
-        net.performParam.regularization = 0.01;
-        net.performFcn = 'mse';
-        net.layers{1}.transferFcn = 'logsig';
-        trainedNet = train(net, sep_Xtrain, sep_Ttrain);
-        y = trainedNet(sep_Xtrain);
-        perf(k) = perform(trainedNet, sep_Ttrain, y);
-        
-        
-      
-
-end 
-
-if plotData == 1
-    figure(1), subplot(1,2,1),
-    plot(Xtrain(1,:),Xtrain(2,:),'.')
-    title('Training Data'), axis equal,
-    subplot(1,2,2),
-    plot(Xtest(1,:),Xtest(2,:),'.')
-    title('Testing Data'), axis equal,
-end
-
+% dummy = ceil(linspace(0,Ntrain,K+1));
+% for k = 1:K
+%     indPartitionLimits(k,:) = [dummy(k)+1,dummy(k+1)]; 
+% end
+% 
+% for k = 1:K
+%     
+%         indValidate = [indPartitionLimits(k,1):indPartitionLimits(k,2)];
+%         xValidate = Xtrain(:,indValidate); % Using folk k as validation set
+%         lValidate = Xlabel(indValidate);
+%         if k == 1
+%             indTrain = [indPartitionLimits(k,2)+1:Ntrain];
+%         elseif k == K
+%             indTrain = [1:indPartitionLimits(k,1)-1];
+%         else
+%             indTrain = cat(2,[1:indPartitionLimits(k,1)-1],[indPartitionLimits(k,2)+1:Ntrain]);
+%         end
+%         % using all other folds as training set
+%         sep_Xtrain = Xtrain(1,indTrain); sep_Ttrain = Xtrain(2,indTrain);
+%         
+%         % create the network with 1 layer
+%         net = feedforwardnet(10);
+%         net.performParam.regularization = 0.01;
+%         net.performFcn = 'mse';
+%         net.layers{1}.transferFcn = 'logsig';
+%         trainedNet = train(net, sep_Xtrain, sep_Ttrain);
+%         y = trainedNet(sep_Xtrain);
+%         perf(k) = perform(trainedNet, sep_Ttrain, y);
+%                    
+% end 
+% 
+% if plotData == 1
+%     figure(1), subplot(1,2,1),
+%     plot(Xtrain(1,:),Xtrain(2,:),'.')
+%     title('Training Data'), axis equal,
+%     subplot(1,2,2),
+%     plot(Xtest(1,:),Xtest(2,:),'.')
+%     title('Testing Data'), axis equal,
+% end
+% 

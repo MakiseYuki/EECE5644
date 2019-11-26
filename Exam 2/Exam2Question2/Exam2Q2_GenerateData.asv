@@ -41,6 +41,7 @@ for k = 1:K
 end
 
 for k = 1:K
+    
         indValidate = [indPartitionLimits(k,1):indPartitionLimits(k,2)];
         xValidate = Xtrain(:,indValidate); % Using folk k as validation set
         lValidate = Xlabel(indValidate);
@@ -61,10 +62,8 @@ for k = 1:K
         net.layers{1}.transferFcn = 'logsig';
         trainedNet = train(net, sep_Xtrain, sep_Ttrain);
         y = trainedNet(sep_Xtrain);
-        perf(k) = perform(net, sep_Ttrain, y);
-        
-        
-      
+        perf(k) = perform(trainedNet, sep_Ttrain, y);
+                   
 
 end 
 
