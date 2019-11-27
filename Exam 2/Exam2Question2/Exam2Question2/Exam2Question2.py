@@ -39,12 +39,12 @@ for choose in logsof_activation:
             
             model.add(Dense(i, activation=choose, input_dim=1))
             model.add(Dense(1, activation=None))
-            sgd = SGD(lr=0.01, decay=1e-5, momentum=0.9, nesterov=True)
+            sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
             model.compile(loss='mean_squared_error', optimizer='adam')
                        
             converged = 0
             temp = 0
-            epsilon = 0.1
+            epsilon = 0.01
             while not converged:
                 model.fit(x_sep_train, t_sep_train, batch_size=128, epochs=100, verbose=0)
                 score = model.evaluate(x_validation, t_validation, verbose=0)
@@ -64,39 +64,55 @@ for choose in logsof_activation:
     k+=1
     accuracy = np.zeros((10,10))
 
-    
-
 model_means_log = np.mean(logistic_accuracy,axis=1)
+model_order_log = np.argmin(model_means_log)+1
+
 model_means_sof = np.mean(softplus_accuracy,axis=1)
-model_order_log = (np.argmin(model_means_log)+1)
-model_order_sof = (np.argmin(model_means_sof)+1)
+model_order_sof = np.argmin(model_means_sof)+1
+
+
 
 #Choose the better activation function between two traning model
 if model_means_sof[model_order_sof-1] < model_means_log[model_order_log-1]:
     choose = 1
-    model_order = model_order_sof
+    model_preference = model_order_sof
 else:
     choose = 0
-    model_order = model_order_log
+    model_preference = model_order_log
 
 model = Sequential()
-model.add(Dense(model_order, activation=logsof_activation[choose], input_dim=1))
+model.add(Dense(model_preference, activation=logsof_activation[choose], input_dim=1))
 model.add(Dense(1, activation=None))
-sgd = SGD(lr=0.01, decay=1e-5, momentum=0.9, nesterov=True)
+sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
 model.compile(loss='mean_squared_error',optimizer='adam')
                
 converged = 0
-tmp = 0
-epsilon = 0.1
+temp = 0
+epsilon = 0.01
 while not converged:
-    model.fit(x_train, t_train, batch_size=128, epochs=100)
-    score = model.evaluate(x_test, t_test)
-    print(score)
-    print(temp)
+    model.fit(x_train, t_train, batch_size=128, epochs=100, verbose=0)
+    score = model.evaluate(x_test, t_test, verbose=0)
     converged = np.abs(score-temp)<epsilon
     temp = score    
 print("MSE on Test Data: " + str(score))
 t_prediction = model.predict(x_test,batch_size=None)
+
+model = Sequential()
+model.add(Dense(4, activation='relu', input_dim=1))
+model.add(Dense(1, activation=None))
+sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
+model.compile(loss='mean_squared_error', optimizer='adam')
+ 
+converged = 0
+temp = 0
+epsilon = 0.01
+while not converged:
+    model.fit(x_train, t_train, batch_size=128, epochs=100, verbose=0)
+    score = model.evaluate(x_test, t_test)
+    converged = np.abs(score-temp)<epsilon
+    temp = score    
+print("MSE on Test Data in Smooth ReLu: " + str(score))
+t_prediction_Relu = model.predict(x_test,batch_size=None)
 
 stop = timeit.default_timer()
 print('Running Time = ', stop-start)
@@ -121,6 +137,16 @@ plt.plot(x_test, t_prediction, '.')
 plt.xlabel('x1');
 plt.show()
 
+
+plt.subplot(121)
+plt.plot(x_test,t_test,'.')
+plt.title('Original Data')
+plt.xlabel('x1'); plt.ylabel('Target = x2')
+plt.subplot(122)
+plt.title('Neural Network Output with ReLu')
+plt.plot(x_test, t_prediction, '.')
+plt.xlabel('x1');
+plt.show()
 
 
 
