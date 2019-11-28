@@ -3,6 +3,7 @@ function label = MAP_Classifier(x,mu,sigma,prior,N)
 label = zeros(1,length(x));
 MAP_result = zeros(N,length(x));
 for n = 1:N
+    % Score each sample to evaulate the probability of classification
     MAP_result(n,:) = prior(n).*evalGaussian(x,mu(:,n),sigma(:,:,n));
 end
 [~,label] = max(MAP_result,[],1);
